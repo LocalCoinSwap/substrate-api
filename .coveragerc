@@ -1,0 +1,10 @@
+[run]
+source =
+  service
+
+omit =
+  *logger*,
+  *settings*,
+  *config/*,
+  *tests/*,
+  venv/*

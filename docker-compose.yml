@@ -1,0 +1,19 @@
+version: "3.7"
+
+services:
+  kusamaapi:
+    init: true
+    stdin_open: true
+    container_name: kusama-api
+    tty: true
+    build: .
+    environment:
+      ENV_SETUP: local
+    ports:
+      - "80:80"
+    networks:
+      - lcsproxy
+
+networks:
+  lcsproxy:
+    name: lcsnetwork
