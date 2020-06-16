@@ -7,7 +7,9 @@ services:
     container_name: kusama-api
     tty: true
     image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api
-    build: .
+    build:
+      context: ../
+      dockerfile: .docker/Dockerfile
     environment:
       ENV_SETUP: local
     ports:

@@ -9,12 +9,12 @@ function peek() {
 
 function build() {
     echo "Building latest container from local"
-    docker-compose build
+    cd .docker && docker-compose build
 }
 
 function push() {
     echo "Pushing docker container to remote"
-    docker-compose push
+    cd .docker && docker-compose push
 }
 
 function deploy() {
