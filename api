@@ -19,6 +19,7 @@ function push() {
 
 function deploy() {
     echo "Creating deployment"
+    kubectl apply -f .docker/deployment.yaml
 }
 
 function top() {
