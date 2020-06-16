@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+
+function peek() {
+    echo "${_args+${_args[${_arg_idx}]}}"
+}
+
+function build() {
+    consume
+    echo "Building latest container from local"
+    docker-compose build
+}
+
+function push() {
+    echo "Pushing docker container to remote"
+    docker-compose push
+}
+
+function deploy() {
+    echo "Creating deployment"
+}
+
+function top() {
+    local -r token=$(peek)
+
+    case "${token}" in
+        build)
+            build
+            ;;
+        push)
+            push
+            ;;
+        deploy)
+            deploy
+            ;;
+        *)
+            expected build push deploy >&2
+            exit 1
+            ;;
+    esac
+
+    if ! end_of_args?; then
+        expected 'end of arguments' >&2
+        exit 1
+    fi
+}
+
+top

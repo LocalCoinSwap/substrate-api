@@ -1,8 +1,0 @@
-[tool.portray]
-modules = ["ksmapi"]
-port = 8100
-
-[tool.portray.mkdocs.theme]
-favicon = "https://static.localcoinswap.com/exchange/assets/images/lcs_logo_light.svg"
-logo = "https://static.localcoinswap.com/exchange/assets/images/lcs_logo_light.svg"
-name = "material"

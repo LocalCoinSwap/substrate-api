@@ -3,7 +3,22 @@ Kusama microservice API providing REST endpoints for multi-signature trading, or
 
 ----
 
-# Local development
+# Building and deployment
+
+Build docker container:
+```
+api build
+```
+
+Push docker container:
+```
+api push
+```
+
+Deploy:
+```
+api deploy
+```
 
 ## Pre-requisites
 

@@ -126,8 +126,7 @@ class GetBalance(Resource):
         args = self.reqparse.parse_args()
         address = args["address"]
 
-        result = kusama.get_balance(address)
-        return result
+        return kusama.get_balance(address)
 
 
 class HeartBeat(Resource):
