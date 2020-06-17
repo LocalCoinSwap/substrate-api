@@ -23,9 +23,13 @@ class TestNonce:
 
 class TestTransferPayload:
     def test_endpoint(self, test_client):
-        payload = {}
+        payload = {
+            "from_address": "HsgNgA5sgjuKxGUeaZPJE8rRn9RuixjvnPkVLFUYLEpj15G",
+            "to_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
+            "value": 22000000000,
+        }
         response = test_client.post("/TransferPayload", json=payload).get_json()
-        assert not response
+        assert len(response) == 232 and response[0:2] == "0x"
 
 
 class TestEscrowAddress:
