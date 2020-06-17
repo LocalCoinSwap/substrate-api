@@ -115,12 +115,18 @@ class ApproveAsMultiPayload(PostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        return kusama.approve_as_multi_payload(
+        approve_as_multi_payload, nonce = kusama.approve_as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
             args["other_signatories"],
         )
+
+        print("POST RESPONSE", approve_as_multi_payload, nonce)
+        return {
+            "approve_as_multi_payload": approve_as_multi_payload,
+            "nonce": nonce,
+        }
 
 
 class ReleaseEscrow(PostResource):

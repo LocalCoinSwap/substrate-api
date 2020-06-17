@@ -61,19 +61,23 @@ class TestEscrowPayloads:
         assert type(response["nonce"]) == int
 
 
-"""
 class TestApproveAsMultiPayload:
     def test_endpoint(self, test_client):
         payload = {
-            "from_address": "",
-            "to_address": "",
-            "value": "",
-            "other_signatories": "",
+            "from_address": "HsgNgA5sgjuKxGUeaZPJE8rRn9RuixjvnPkVLFUYLEpj15G",
+            "to_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
+            "value": 9900000000,
+            "other_signatories": [
+                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            ],
         }
         response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
+        print("RESPONSE", response)
         assert not response
 
 
+"""
 class TestReleaseEscrow:
     def test_endpoint(self, test_client):
         payload = {
