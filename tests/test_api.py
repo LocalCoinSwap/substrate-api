@@ -95,53 +95,52 @@ class TestReleaseEscrow:
         assert len(response) == 444 and response[0:2] == "0x"
 
 
-"""
 class TestCancellation:
     def test_endpoint(self, test_client):
         payload = {
-            "seller_address": "",
-            "trade_value": "",
-            "fee_value": "",
-            "other_signatories": "",
-            "timepoint": "",
+            "seller_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            "trade_value": 9900000000,
+            "fee_value": 10000,
+            "other_signatories": [
+                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            ],
+            "timepoint": (2000, 8),
         }
         response = test_client.post("/Cancellation", json=payload).get_json()
-        assert not response
+        assert len(response) == 444 and response[0:2] == "0x"
 
 
 class TestDispute:
     def test_endpoint(self, test_client):
         payload = {
-            "victor": "",
-            "seller_address": "",
-            "trade_value": "",
-            "fee_value": "",
-            "other_signatories": "",
-            "welfare_value": "",
+            "victor": "buyer",
+            "seller_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            "trade_value": 9900000000,
+            "fee_value": 100000,
+            "other_signatories": [
+                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            ],
+            "welfare_value": 100000,
         }
         response = test_client.post("/Dispute", json=payload).get_json()
-        assert not response
-
-
-class TestIsTransactionSuccess:
-    def test_endpoint(self, test_client):
-        payload = {
-            "transaction_type": "",
-            "events": "",
-        }
-        response = test_client.post("/IsTransactionSuccess", json=payload).get_json()
-        assert not response
+        assert len(response) == 412 and response[0:2] == "0x"
 
 
 class TestDiagnose:
     def test_endpoint(self, test_client):
         payload = {
-            "name": "",
+            "escrow_address": "HFXXfXavDuKhLLBhFQTat2aaRQ5CMMw9mwswHzWi76m6iLt",
         }
         response = test_client.post("/Diagnose", json=payload).get_json()
-        assert not response
+        assert type(response) == dict
+        assert response.get(
+            "0cef89f69f02a6cde5169574b6474ddc8e513dbf257c6fdfbe30ebd1303c2cee", None
+        )
 
 
+"""
 class TestPublish:
     def test_endpoint(self, test_client):
         payload = {}

@@ -53,8 +53,8 @@ cancellation = [
     {"name": "seller_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
     {"name": "fee_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": list, "required": True},
-    {"name": "timepoint", "type": tuple, "required": True},
+    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "timepoint", "type": str, "required": True, "action": "append"},
 ]
 
 dispute = [
@@ -62,8 +62,8 @@ dispute = [
     {"name": "seller_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
     {"name": "fee_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": list, "required": True},
-    {"name": "welfare_value", "type": tuple, "required": False},
+    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "welfare_value", "type": str, "required": False},
 ]
 
 is_transaction_success = [

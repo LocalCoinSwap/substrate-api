@@ -10,7 +10,6 @@ from service.typings import diagnose
 from service.typings import dispute
 from service.typings import escrow_address
 from service.typings import escrow_payloads
-from service.typings import is_transaction_success
 from service.typings import nonce
 from service.typings import publish
 from service.typings import release_escrow
@@ -178,7 +177,7 @@ class Dispute(PostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        return kusama.dispute(
+        return kusama.resolve_dispute(
             args["victor"],
             args["seller_address"],
             args["trade_value"],
@@ -186,20 +185,6 @@ class Dispute(PostResource):
             args["other_signatories"],
             args["welfare_value"],
         )
-
-
-class IsTransactionSuccess(PostResource):
-    """
-    Check if a transaction was successful
-    """
-
-    def __init__(self):
-        super(IsTransactionSuccess, self).__init__(is_transaction_success)
-
-    def post(self):
-        args = self.reqparse.parse_args()
-
-        return kusama.is_transaction_success(args["transaction_type"], args["events"],)
 
 
 class Diagnose(PostResource):
@@ -265,6 +250,5 @@ def get_resources(api):
     api.add_resource(ReleaseEscrow, "/ReleaseEscrow")
     api.add_resource(Cancellation, "/Cancellation")
     api.add_resource(Dispute, "/Dispute")
-    api.add_resource(IsTransactionSuccess, "/IsTransactionSuccess")
     api.add_resource(Diagnose, "/Diagnose")
     api.add_resource(HeartBeat, "/HeartBeat")
