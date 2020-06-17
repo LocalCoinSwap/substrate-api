@@ -12,12 +12,12 @@ Build docker container:
 
 Push docker container:
 ```
-api push
+./api push
 ```
 
 Deploy:
 ```
-api deploy
+./api deploy
 ```
 
 ## Pre-requisites
