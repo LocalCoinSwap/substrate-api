@@ -39,7 +39,7 @@ approve_as_multi_payload = [
     {"name": "from_address", "type": str, "required": True},
     {"name": "to_address", "type": str, "required": True},
     {"name": "value", "type": int, "required": True},
-    {"name": "other_signatories", "type": list, "required": True},
+    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
 ]
 
 release_escrow = [

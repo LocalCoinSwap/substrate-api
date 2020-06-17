@@ -122,7 +122,6 @@ class ApproveAsMultiPayload(PostResource):
             args["other_signatories"],
         )
 
-        print("POST RESPONSE", approve_as_multi_payload, nonce)
         return {
             "approve_as_multi_payload": approve_as_multi_payload,
             "nonce": nonce,

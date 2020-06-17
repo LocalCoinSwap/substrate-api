@@ -73,8 +73,11 @@ class TestApproveAsMultiPayload:
             ],
         }
         response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
-        print("RESPONSE", response)
-        assert not response
+        assert type(response["nonce"]) == int
+        assert (
+            len(response["approve_as_multi_payload"]) == 356
+            and response["approve_as_multi_payload"][0:2] == "0x"
+        )
 
 
 """
