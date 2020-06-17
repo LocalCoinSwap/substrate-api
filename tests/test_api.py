@@ -23,65 +23,79 @@ class TestNonce:
 
 class TestTransferPayload:
     def test_endpoint(self, test_client):
-        response = test_client.post("/TransferPayload").get_json()
+        payload = {}
+        response = test_client.post("/TransferPayload", json=payload).get_json()
         assert not response
 
 
 class TestEscrowAddress:
     def test_endpoint(self, test_client):
-        response = test_client.post("/EscrowAddress").get_json()
-        assert not response
+        payload = {
+            "buyer_address": "DwRh5ShcnuPzgyhW6J6m4mw1y63hUy1ctR3RSWRSgLg1HQ5",
+            "seller_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
+        }
+        response = test_client.post("/EscrowAddress", json=payload).get_json()
+        assert response == "Fgh5GQ1guNxvurv71cmHm8H5Eo8Ywrdz1mZemffAP2UrrH2"
 
 
 class TestEscrowPayloads:
     def test_endpoint(self, test_client):
-        response = test_client.post("/EscrowPayloads").get_json()
+        payload = {}
+        response = test_client.post("/EscrowPayloads", json=payload).get_json()
         assert not response
 
 
 class TestPublish:
     def test_endpoint(self, test_client):
-        response = test_client.post("/Publish").get_json()
+        payload = {}
+        response = test_client.post("/Publish", json=payload).get_json()
         assert not response
 
 
 class TestBroadcast:
     def test_endpoint(self, test_client):
-        response = test_client.post("/Broadcast").get_json()
+        payload = {}
+        response = test_client.post("/Broadcast", json=payload).get_json()
         assert not response
 
 
 class TestApproveAsMultiPayload:
     def test_endpoint(self, test_client):
-        response = test_client.post("/ApproveAsMultiPayload").get_json()
+        payload = {}
+        response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
         assert not response
 
 
 class TestReleaseEscrow:
     def test_endpoint(self, test_client):
-        response = test_client.post("/ReleaseEscrow").get_json()
+        payload = {}
+        response = test_client.post("/ReleaseEscrow", json=payload).get_json()
         assert not response
 
 
 class TestCancellation:
     def test_endpoint(self, test_client):
-        response = test_client.post("/Cancellation").get_json()
+        payload = {}
+        response = test_client.post("/Cancellation", json=payload).get_json()
         assert not response
 
 
 class TestDispute:
     def test_endpoint(self, test_client):
-        response = test_client.post("/Dispute").get_json()
+        payload = {}
+        response = test_client.post("/Dispute", json=payload).get_json()
         assert not response
 
 
 class TestIsTransactionSuccess:
     def test_endpoint(self, test_client):
-        response = test_client.post("/IsTransactionSuccess").get_json()
+        payload = {}
+        response = test_client.post("/IsTransactionSuccess", json=payload).get_json()
         assert not response
 
 
 class TestDiagnose:
     def test_endpoint(self, test_client):
-        response = test_client.post("/Diagnose").get_json()
+        payload = {}
+        response = test_client.post("/Diagnose", json=payload).get_json()
         assert not response
