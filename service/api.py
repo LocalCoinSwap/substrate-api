@@ -142,8 +142,8 @@ class ReleaseEscrow(PostResource):
         return kusama.release_escrow(
             args["buyer_address"],
             args["trade_value"],
-            args["other_signatories"],
             args["timepoint"],
+            args["other_signatories"],
         )
 
 

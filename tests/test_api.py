@@ -80,19 +80,22 @@ class TestApproveAsMultiPayload:
         )
 
 
-"""
 class TestReleaseEscrow:
     def test_endpoint(self, test_client):
         payload = {
-            "buyer_address": "",
-            "trade_value": "",
-            "other_signatories": "",
-            "timepoint": "",
+            "buyer_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
+            "trade_value": 9900000000,
+            "other_signatories": [
+                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            ],
+            "timepoint": (2000, 8),
         }
         response = test_client.post("/ReleaseEscrow", json=payload).get_json()
-        assert not response
+        assert len(response) == 444 and response[0:2] == "0x"
 
 
+"""
 class TestCancellation:
     def test_endpoint(self, test_client):
         payload = {

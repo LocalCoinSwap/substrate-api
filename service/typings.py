@@ -45,8 +45,8 @@ approve_as_multi_payload = [
 release_escrow = [
     {"name": "buyer_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": list, "required": True},
-    {"name": "timepoint", "type": tuple, "required": True},
+    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "timepoint", "type": str, "required": True, "action": "append"},
 ]
 
 cancellation = [
