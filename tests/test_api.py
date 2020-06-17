@@ -44,8 +44,91 @@ class TestEscrowAddress:
 
 class TestEscrowPayloads:
     def test_endpoint(self, test_client):
-        payload = {}
+        payload = {
+            "seller_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+            "escrow_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
+            "trade_value": 9900000000,
+            "fee_value": 100000000,
+        }
         response = test_client.post("/EscrowPayloads", json=payload).get_json()
+        assert (
+            len(response["escrow_payload"]) == 232
+            and response["escrow_payload"][0:2] == "0x"
+        )
+        assert (
+            len(response["fee_payload"]) == 228 and response["fee_payload"][0:2] == "0x"
+        )
+        assert type(response["nonce"]) == int
+
+
+"""
+class TestApproveAsMultiPayload:
+    def test_endpoint(self, test_client):
+        payload = {
+            "from_address": "",
+            "to_address": "",
+            "value": "",
+            "other_signatories": "",
+        }
+        response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
+        assert not response
+
+
+class TestReleaseEscrow:
+    def test_endpoint(self, test_client):
+        payload = {
+            "buyer_address": "",
+            "trade_value": "",
+            "other_signatories": "",
+            "timepoint": "",
+        }
+        response = test_client.post("/ReleaseEscrow", json=payload).get_json()
+        assert not response
+
+
+class TestCancellation:
+    def test_endpoint(self, test_client):
+        payload = {
+            "seller_address": "",
+            "trade_value": "",
+            "fee_value": "",
+            "other_signatories": "",
+            "timepoint": "",
+        }
+        response = test_client.post("/Cancellation", json=payload).get_json()
+        assert not response
+
+
+class TestDispute:
+    def test_endpoint(self, test_client):
+        payload = {
+            "victor": "",
+            "seller_address": "",
+            "trade_value": "",
+            "fee_value": "",
+            "other_signatories": "",
+            "welfare_value": "",
+        }
+        response = test_client.post("/Dispute", json=payload).get_json()
+        assert not response
+
+
+class TestIsTransactionSuccess:
+    def test_endpoint(self, test_client):
+        payload = {
+            "transaction_type": "",
+            "events": "",
+        }
+        response = test_client.post("/IsTransactionSuccess", json=payload).get_json()
+        assert not response
+
+
+class TestDiagnose:
+    def test_endpoint(self, test_client):
+        payload = {
+            "name": "",
+        }
+        response = test_client.post("/Diagnose", json=payload).get_json()
         assert not response
 
 
@@ -62,44 +145,4 @@ class TestBroadcast:
         response = test_client.post("/Broadcast", json=payload).get_json()
         assert not response
 
-
-class TestApproveAsMultiPayload:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
-        assert not response
-
-
-class TestReleaseEscrow:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/ReleaseEscrow", json=payload).get_json()
-        assert not response
-
-
-class TestCancellation:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/Cancellation", json=payload).get_json()
-        assert not response
-
-
-class TestDispute:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/Dispute", json=payload).get_json()
-        assert not response
-
-
-class TestIsTransactionSuccess:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/IsTransactionSuccess", json=payload).get_json()
-        assert not response
-
-
-class TestDiagnose:
-    def test_endpoint(self, test_client):
-        payload = {}
-        response = test_client.post("/Diagnose", json=payload).get_json()
-        assert not response
+"""

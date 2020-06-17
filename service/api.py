@@ -31,9 +31,8 @@ class Balance(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        address = args["address"]
 
-        return kusama.get_balance(address)
+        return kusama.get_balance(args["address"])
 
 
 class Nonce(PostResource):
@@ -46,9 +45,8 @@ class Nonce(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        address = args["address"]
 
-        return kusama.get_nonce(address)
+        return kusama.get_nonce(args["address"])
 
 
 class TransferPayload(PostResource):
@@ -61,11 +59,10 @@ class TransferPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        from_address = args["from_address"]
-        to_address = args["to_address"]
-        value = args["value"]
 
-        return kusama.transfer_payload(from_address, to_address, value)
+        return kusama.transfer_payload(
+            args["from_address"], args["to_address"], args["value"]
+        )
 
 
 class EscrowAddress(PostResource):
@@ -78,10 +75,8 @@ class EscrowAddress(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        buyer_address = args["buyer_address"]
-        seller_address = args["seller_address"]
 
-        return kusama.get_escrow_address(buyer_address, seller_address)
+        return kusama.get_escrow_address(args["buyer_address"], args["seller_address"])
 
 
 class EscrowPayloads(PostResource):
@@ -92,23 +87,21 @@ class EscrowPayloads(PostResource):
     def __init__(self):
         super(EscrowPayloads, self).__init__(escrow_payloads)
 
+    def post(self):
+        args = self.reqparse.parse_args()
 
-class Publish(PostResource):
-    """
-    Build and publish a transaction
-    """
+        escrow_payload, fee_payload, nonce = kusama.escrow_payloads(
+            args["seller_address"],
+            args["escrow_address"],
+            args["trade_value"],
+            args["fee_value"],
+        )
 
-    def __init__(self):
-        super(Publish, self).__init__(publish)
-
-
-class Broadcast(PostResource):
-    """
-    Broadcast a built transaction
-    """
-
-    def __init__(self):
-        super(Broadcast, self).__init__(broadcast)
+        return {
+            "escrow_payload": escrow_payload,
+            "fee_payload": fee_payload,
+            "nonce": nonce,
+        }
 
 
 class ApproveAsMultiPayload(PostResource):
@@ -119,6 +112,16 @@ class ApproveAsMultiPayload(PostResource):
     def __init__(self):
         super(ApproveAsMultiPayload, self).__init__(approve_as_multi_payload)
 
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.approve_as_multi_payload(
+            args["from_address"],
+            args["to_address"],
+            args["value"],
+            args["other_signatories"],
+        )
+
 
 class ReleaseEscrow(PostResource):
     """
@@ -127,6 +130,16 @@ class ReleaseEscrow(PostResource):
 
     def __init__(self):
         super(ReleaseEscrow, self).__init__(release_escrow)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.release_escrow(
+            args["buyer_address"],
+            args["trade_value"],
+            args["other_signatories"],
+            args["timepoint"],
+        )
 
 
 class Cancellation(PostResource):
@@ -137,6 +150,17 @@ class Cancellation(PostResource):
     def __init__(self):
         super(Cancellation, self).__init__(cancellation)
 
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.cancellation(
+            args["seller_address"],
+            args["trade_value"],
+            args["fee_value"],
+            args["other_signatories"],
+            args["timepoint"],
+        )
+
 
 class Dispute(PostResource):
     """
@@ -145,6 +169,18 @@ class Dispute(PostResource):
 
     def __init__(self):
         super(Dispute, self).__init__(dispute)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.dispute(
+            args["victor"],
+            args["seller_address"],
+            args["trade_value"],
+            args["fee_value"],
+            args["other_signatories"],
+            args["welfare_value"],
+        )
 
 
 class IsTransactionSuccess(PostResource):
@@ -155,6 +191,11 @@ class IsTransactionSuccess(PostResource):
     def __init__(self):
         super(IsTransactionSuccess, self).__init__(is_transaction_success)
 
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.is_transaction_success(args["transaction_type"], args["events"],)
+
 
 class Diagnose(PostResource):
     """
@@ -163,6 +204,39 @@ class Diagnose(PostResource):
 
     def __init__(self):
         super(Diagnose, self).__init__(diagnose)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.diagnose(args["escrow_address"])
+
+
+class Publish(PostResource):
+    """
+    Build and publish a transaction
+    """
+
+    def __init__(self):
+        super(Publish, self).__init__(publish)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.publish(args["type"], args["params"])
+
+
+class Broadcast(PostResource):
+    """
+    Broadcast a built transaction
+    """
+
+    def __init__(self):
+        super(Broadcast, self).__init__(broadcast)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        return kusama.broadcast(args["type"], args["transaction"])
 
 
 class HeartBeat(Resource):
