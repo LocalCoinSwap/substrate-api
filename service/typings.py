@@ -27,7 +27,7 @@ escrow_payloads = [
 
 publish = [
     {"name": "type", "type": str, "required": True},
-    {"name": "params", "type": list, "required": True},
+    {"name": "params", "type": str, "required": True, "action": "append"},
 ]
 
 broadcast = [
