@@ -140,18 +140,30 @@ class TestDiagnose:
         )
 
 
-"""
 class TestPublish:
     def test_endpoint(self, test_client):
-        payload = {}
+        payload = {
+            "type": "transfer",
+            "params": [
+                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
+                "56b3f88ae9c5de73b18449b789a98087463f7d8b7fc0dac6fee4c82597e24c6fe2d0398458842eb561de49b14de2f0ddb2313d5c12de347592e96fa30d4f2480",
+                34,
+                "GKm5rrf151KKrMeKEo3TxqKuznnWE1uz5zGvj4ZB19uGmqE",
+                10000000000,
+            ],
+        }
         response = test_client.post("/Publish", json=payload).get_json()
         assert not response
 
 
+"""
+# Current transaction should be good to broadcast once
 class TestBroadcast:
     def test_endpoint(self, test_client):
-        payload = {}
+        payload = {
+            'type': 'transfer',
+            'transaction': '0x3502840c85dc20f15e3d8328b6a162d47ce43771fe6925f0effb8b878bcd1ff28d8f1201ea312383c4ed09954453395653a3e84f779c080c2ba80c06562047b6b882c64b171d47c7773dd82c353deddea1b4d24baa54324766ddb47d24692754b91f57850090000400dee35cf94a50737fc2f3c60439e8bae056aabdcde99de4f2d37a5f5957bcec4b0700e40b5402'
+        }
         response = test_client.post("/Broadcast", json=payload).get_json()
         assert not response
-
 """
