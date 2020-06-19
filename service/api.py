@@ -212,12 +212,11 @@ class Publish(PostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        tx_hash, timepoint, success = kusama.publish(args["type"], args["params"])
+        success, response = kusama.publish(args["type"], args["params"])
 
         return {
             "success": success,
-            "tx_hash": tx_hash,
-            "timepoint": timepoint,
+            "response": response,
         }
 
 
@@ -232,14 +231,11 @@ class Broadcast(PostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        tx_hash, timepoint, success = kusama.broadcast(
-            args["type"], args["transaction"]
-        )
+        success, response = kusama.broadcast(args["type"], args["transaction"])
 
         return {
             "success": success,
-            "tx_hash": tx_hash,
-            "timepoint": timepoint,
+            "response": response,
         }
 
 
