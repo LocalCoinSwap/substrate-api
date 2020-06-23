@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  kusamaapi:
+    init: true
+    stdin_open: true
+    container_name: kusamaapi
+    tty: true
+    user: pyuser
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    command: python main.py runserver
+    ports:
+      - 12000:12000
+    environment:
+      - ENV_SETUP=local
+    volumes:
+      - .:/kusama-api:delegated
+    networks:
+      - lcsproxy
+      - default
+
+networks:
+  lcsproxy:
+    name: lcsnetwork

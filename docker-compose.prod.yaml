@@ -4,18 +4,19 @@ services:
   kusamaapi:
     init: true
     stdin_open: true
-    container_name: kusama-api
+    container_name: kusamaapi
     tty: true
     image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api
     build:
-      context: ../
-      dockerfile: .docker/Dockerfile
+      context: .
+      dockerfile: Dockerfile.prod
     environment:
-      ENV_SETUP: local
+      - ENV_SETUP=production
     ports:
-      - "8003:80"
+      - "80:80"
     networks:
       - lcsproxy
+      - default
 
 networks:
   lcsproxy:

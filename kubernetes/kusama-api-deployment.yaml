@@ -2,17 +2,19 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: kusama-api-deployment
+  namespace: default
   labels:
-    app: kusama-api
+    name: kusama-api
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
-      app: kusama-api
+      name: kusama-api
   template:
     metadata:
+      name: kusama-api
       labels:
-        app: kusama-api
+        name: kusama-api
     spec:
       containers:
         - name: kusama-api

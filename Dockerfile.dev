@@ -1,0 +1,12 @@
+FROM python:3
+ENV PYTHONUNBUFFERED 1
+RUN adduser pyuser
+RUN mkdir /kusama-api
+WORKDIR /kusama-api
+COPY requirements.txt ./
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
+COPY . .
+RUN chmod +x main.py
+RUN chown -R pyuser:pyuser /kusama-api
+USER pyuser
