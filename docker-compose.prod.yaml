@@ -6,12 +6,10 @@ services:
     stdin_open: true
     container_name: kusamaapi
     tty: true
-    image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api
+    image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api:${COMMIT_HASH}
     build:
       context: .
       dockerfile: Dockerfile.prod
-    environment:
-      - ENV_SETUP=production
     ports:
       - "80:80"
     networks:
