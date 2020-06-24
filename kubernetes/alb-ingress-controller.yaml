@@ -18,7 +18,7 @@ spec:
       - name: alb-ingress-controller
         args:
         - --ingress-class=alb
-        - --cluster-name=goku-test
+        - --cluster-name=lcs-eks
         - --aws-vpc-id=vpc-07c8e637393a7a1dc
         - --aws-region=us-east-1
         image: docker.io/amazon/aws-alb-ingress-controller:v1.1.6
