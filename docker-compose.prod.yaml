@@ -6,7 +6,7 @@ services:
     stdin_open: true
     container_name: kusamaapi
     tty: true
-    image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api:${COMMIT_HASH}
+    image: ${CONTAINER_REPO}/${IMAGE_NAME}:${COMMIT_HASH}
     build:
       context: .
       dockerfile: Dockerfile.prod

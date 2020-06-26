@@ -18,6 +18,6 @@ spec:
     spec:
       containers:
         - name: kusama-api
-          image: 406746673604.dkr.ecr.us-east-1.amazonaws.com/kusama-api:latest
+          image: $CONTAINER_REPO/$IMAGE_NAME:$COMMIT_HASH
           ports:
             - containerPort: 80
