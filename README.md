@@ -5,20 +5,29 @@ Kusama microservice API providing REST endpoints for multi-signature trading, or
 
 # Building and deployment
 
-Build docker container:
-```
-./api build
+### Build for production
+
+```bash
+export CONTAINER_REPO=YOUR_CONTAINER_REPO_NAME_OR_URL # Update this with your dockerhub username
+export IMAGE_NAME=kusama-api
+export COMMIT_HASH=$(git rev-parse --short HEAD)
+CONTAINER_REPO=$CONTAINER_REPO IMAGE_NAME=$IMAGE_NAME COMMIT_HASH=$COMMIT_HASH docker-compose -f docker-compose.prod.yaml build
 ```
 
-Push docker container:
+### Push the image to container repo
+
 ```
-./api push
+docker push $CONTAINER_REPO/$IMAGE_NAME:$COMMIT_HASH
 ```
 
-Deploy:
+### Initiate a rolling deployment
+
 ```
-./api deploy
+kubectl edit deployments.apps/kusama-api-deployment
 ```
+
+It'll open up default editor. Look for the container repo and image name. Change the image tag and save & exit. It will start rolling deployment without causing any outage.
+
 
 ## Pre-requisites
 
