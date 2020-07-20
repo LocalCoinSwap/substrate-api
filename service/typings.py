@@ -39,13 +39,13 @@ approve_as_multi_payload = [
     {"name": "from_address", "type": str, "required": True},
     {"name": "to_address", "type": str, "required": True},
     {"name": "value", "type": int, "required": True},
-    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "other_trader", "type": str, "required": True},
 ]
 
 release_escrow = [
     {"name": "buyer_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "seller_address", "type": str, "required": True},
     {"name": "timepoint", "type": str, "required": True, "action": "append"},
 ]
 
@@ -53,7 +53,7 @@ cancellation = [
     {"name": "seller_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
     {"name": "fee_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "buyer_address", "type": str, "required": True},
     {"name": "timepoint", "type": str, "required": True, "action": "append"},
 ]
 
@@ -62,7 +62,7 @@ dispute = [
     {"name": "seller_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
     {"name": "fee_value", "type": int, "required": True},
-    {"name": "other_signatories", "type": str, "required": True, "action": "append"},
+    {"name": "buyer_address", "type": str, "required": True},
     {"name": "welfare_value", "type": str, "required": False},
 ]
 

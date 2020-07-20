@@ -67,10 +67,7 @@ class TestApproveAsMultiPayload:
             "from_address": "HsgNgA5sgjuKxGUeaZPJE8rRn9RuixjvnPkVLFUYLEpj15G",
             "to_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
             "value": 9900000000,
-            "other_signatories": [
-                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
-            ],
+            "other_trader": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
         }
         response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
         assert type(response["nonce"]) == int
@@ -85,10 +82,7 @@ class TestReleaseEscrow:
         payload = {
             "buyer_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
             "trade_value": 9900000000,
-            "other_signatories": [
-                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
-            ],
+            "seller_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
             "timepoint": (2000, 8),
         }
         response = test_client.post("/ReleaseEscrow", json=payload).get_json()
@@ -101,10 +95,7 @@ class TestCancellation:
             "seller_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
             "trade_value": 9900000000,
             "fee_value": 10000,
-            "other_signatories": [
-                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
-            ],
+            "buyer_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
             "timepoint": (2000, 8),
         }
         response = test_client.post("/Cancellation", json=payload).get_json()
@@ -118,10 +109,7 @@ class TestDispute:
             "seller_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
             "trade_value": 9900000000,
             "fee_value": 100000,
-            "other_signatories": [
-                "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-                "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
-            ],
+            "buyer_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
             "welfare_value": 100000,
         }
         response = test_client.post("/Dispute", json=payload).get_json()

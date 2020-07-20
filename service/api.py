@@ -113,12 +113,13 @@ class ApproveAsMultiPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        address = kusama.arbitrator_address
 
         approve_as_multi_payload, nonce = kusama.approve_as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
-            args["other_signatories"],
+            [args["other_trader"], address],
         )
 
         return {
@@ -137,12 +138,13 @@ class ReleaseEscrow(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        address = kusama.arbitrator_address
 
         return kusama.release_escrow(
             args["buyer_address"],
             args["trade_value"],
             args["timepoint"],
-            args["other_signatories"],
+            [args["seller_address"], address],
         )
 
 
@@ -156,12 +158,13 @@ class Cancellation(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        address = kusama.arbitrator_address
 
         return kusama.cancellation(
             args["seller_address"],
             args["trade_value"],
             args["fee_value"],
-            args["other_signatories"],
+            [args["buyer_address"], address],
             args["timepoint"],
         )
 
@@ -176,13 +179,14 @@ class Dispute(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        address = kusama.arbitrator_address
 
         return kusama.resolve_dispute(
             args["victor"],
             args["seller_address"],
             args["trade_value"],
             args["fee_value"],
-            args["other_signatories"],
+            [args["buyer_address"], address],
             args["welfare_value"],
         )
 
