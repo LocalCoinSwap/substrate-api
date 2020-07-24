@@ -3,6 +3,7 @@ from flask_restful import Resource
 from service.logger import Logger
 from service.middleware import kusama
 from service.typings import approve_as_multi_payload
+from service.typings import as_multi_payload
 from service.typings import balance
 from service.typings import broadcast
 from service.typings import cancellation
@@ -124,6 +125,32 @@ class ApproveAsMultiPayload(PostResource):
 
         return {
             "approve_as_multi_payload": approve_as_multi_payload,
+            "nonce": nonce,
+        }
+
+
+class AsMultiPayload(PostResource):
+    """
+    Get the payload to sign for an as multi call
+    """
+
+    def __init__(self):
+        super(AsMultiPayload, self).__init__(as_multi_payload)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+        address = kusama.arbitrator_address
+
+        as_multi_payload, nonce = kusama.as_multi_payload(
+            args["from_address"],
+            args["to_address"],
+            args["value"],
+            [args["other_trader"], address],
+            args["timepoint"],
+        )
+
+        return {
+            "as_multi_payload": as_multi_payload,
             "nonce": nonce,
         }
 
@@ -260,6 +287,7 @@ def get_resources(api):
     api.add_resource(EscrowPayloads, "/EscrowPayloads")
     api.add_resource(Publish, "/Publish")
     api.add_resource(Broadcast, "/Broadcast")
+    api.add_resource(AsMultiPayload, "/AsMultiPayload")
     api.add_resource(ApproveAsMultiPayload, "/ApproveAsMultiPayload")
     api.add_resource(ReleaseEscrow, "/ReleaseEscrow")
     api.add_resource(Cancellation, "/Cancellation")

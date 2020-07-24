@@ -42,6 +42,14 @@ approve_as_multi_payload = [
     {"name": "other_trader", "type": str, "required": True},
 ]
 
+as_multi_payload = [
+    {"name": "from_address", "type": str, "required": True},
+    {"name": "to_address", "type": str, "required": True},
+    {"name": "value", "type": int, "required": True},
+    {"name": "other_trader", "type": str, "required": True},
+    {"name": "timepoint", "type": str, "required": False, "action": "append"},
+]
+
 release_escrow = [
     {"name": "buyer_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
