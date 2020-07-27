@@ -89,7 +89,7 @@ class TestAsMultiPayload:
         response = test_client.post("/AsMultiPayload", json=payload).get_json()
         assert type(response["nonce"]) == int
         assert (
-            len(response["as_multi_payload"]) == 372
+            len(response["as_multi_payload"]) == 408
             and response["as_multi_payload"][0:2] == "0x"
         )
 
@@ -103,7 +103,7 @@ class TestReleaseEscrow:
             "timepoint": (2000, 8),
         }
         response = test_client.post("/ReleaseEscrow", json=payload).get_json()
-        assert len(response) == 688 and response[0:2] == "0x"
+        assert len(response) == 464 and response[0:2] == "0x"
 
 
 class TestCancellation:
@@ -116,7 +116,7 @@ class TestCancellation:
             "timepoint": (2000, 8),
         }
         response = test_client.post("/Cancellation", json=payload).get_json()
-        assert len(response) == 688 and response[0:2] == "0x"
+        assert len(response) == 464 and response[0:2] == "0x"
 
 
 class TestDispute:
