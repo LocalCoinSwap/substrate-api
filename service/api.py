@@ -241,9 +241,18 @@ class Publish(PostResource):
         super(Publish, self).__init__(publish)
 
     def post(self):
-        args = self.reqparse.parse_args()
+        params = self.reqparse.parse_args()["params"]
+        tx_type = self.reqparse.parse_args()["type"]
+        address = kusama.arbitrator_address
 
-        success, response = kusama.publish(args["type"], args["params"])
+        for param in params:
+            if type(param) != list:
+                continue
+            for item in param:
+                if item == "arbitrator_address":
+                    params[param][item] = address
+
+        success, response = kusama.publish(tx_type, params)
 
         return {
             "success": success,
