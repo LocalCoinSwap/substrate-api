@@ -11,6 +11,7 @@ from service.typings import diagnose
 from service.typings import dispute
 from service.typings import escrow_address
 from service.typings import escrow_payloads
+from service.typings import multi_balance
 from service.typings import nonce
 from service.typings import publish
 from service.typings import release_escrow
@@ -33,6 +34,25 @@ class Balance(PostResource):
         args = self.reqparse.parse_args()
 
         return kusama.get_balance(args["address"])
+
+
+class MultiBalance(PostResource):
+    """
+    Get the balances from an address dictionary
+    """
+
+    def __init__(self):
+        super(MultiBalance, self).__init__(multi_balance)
+
+    def post(self):
+        addresses = self.reqparse.parse_args()["addresses"]
+        result = {}
+
+        for address in addresses:
+            result[address] = {"KSM": {}}
+            result[address]["KSM"]["amount"] = kusama.get_balance(address)
+
+        return result
 
 
 class Nonce(PostResource):
@@ -291,6 +311,7 @@ class HeartBeat(Resource):
 def get_resources(api):
     api.add_resource(Nonce, "/Nonce")
     api.add_resource(Balance, "/Balance")
+    api.add_resource(MultiBalance, "/AddressBalance")
     api.add_resource(TransferPayload, "/TransferPayload")
     api.add_resource(EscrowAddress, "/EscrowAddress")
     api.add_resource(EscrowPayloads, "/EscrowPayloads")

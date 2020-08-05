@@ -6,6 +6,8 @@ balance = [{"name": "address", "type": str, "required": True}]
 
 nonce = [{"name": "address", "type": str, "required": True}]
 
+multi_balance = [{"name": "addresses", "type": dict, "required": True}]
+
 transfer_payload = [
     {"name": "from_address", "type": str, "required": True},
     {"name": "to_address", "type": str, "required": True},
