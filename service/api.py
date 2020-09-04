@@ -1,21 +1,8 @@
 from flask_restful import Resource
 
+from service import typings
 from service.logger import Logger
 from service.middleware import kusama
-from service.typings import approve_as_multi_payload
-from service.typings import as_multi_payload
-from service.typings import balance
-from service.typings import broadcast
-from service.typings import cancellation
-from service.typings import diagnose
-from service.typings import dispute
-from service.typings import escrow_address
-from service.typings import escrow_payloads
-from service.typings import multi_balance
-from service.typings import nonce
-from service.typings import publish
-from service.typings import release_escrow
-from service.typings import transfer_payload
 from service.utils import PostResource
 
 log = Logger("Api", True, True, False)
@@ -28,7 +15,7 @@ class Balance(PostResource):
     """
 
     def __init__(self):
-        super(Balance, self).__init__(balance)
+        super(Balance, self).__init__(typings.balance)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -42,7 +29,7 @@ class MultiBalance(PostResource):
     """
 
     def __init__(self):
-        super(MultiBalance, self).__init__(multi_balance)
+        super(MultiBalance, self).__init__(typings.multi_balance)
 
     def post(self):
         addresses = self.reqparse.parse_args()["addresses"]
@@ -61,7 +48,7 @@ class Nonce(PostResource):
     """
 
     def __init__(self):
-        super(Nonce, self).__init__(nonce)
+        super(Nonce, self).__init__(typings.nonce)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -75,7 +62,7 @@ class TransferPayload(PostResource):
     """
 
     def __init__(self):
-        super(TransferPayload, self).__init__(transfer_payload)
+        super(TransferPayload, self).__init__(typings.transfer_payload)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -91,7 +78,7 @@ class EscrowAddress(PostResource):
     """
 
     def __init__(self):
-        super(EscrowAddress, self).__init__(escrow_address)
+        super(EscrowAddress, self).__init__(typings.escrow_address)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -105,7 +92,7 @@ class EscrowPayloads(PostResource):
     """
 
     def __init__(self):
-        super(EscrowPayloads, self).__init__(escrow_payloads)
+        super(EscrowPayloads, self).__init__(typings.escrow_payloads)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -130,7 +117,7 @@ class ApproveAsMultiPayload(PostResource):
     """
 
     def __init__(self):
-        super(ApproveAsMultiPayload, self).__init__(approve_as_multi_payload)
+        super(ApproveAsMultiPayload, self).__init__(typings.approve_as_multi_payload)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -155,7 +142,7 @@ class AsMultiPayload(PostResource):
     """
 
     def __init__(self):
-        super(AsMultiPayload, self).__init__(as_multi_payload)
+        super(AsMultiPayload, self).__init__(typings.as_multi_payload)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -181,7 +168,7 @@ class ReleaseEscrow(PostResource):
     """
 
     def __init__(self):
-        super(ReleaseEscrow, self).__init__(release_escrow)
+        super(ReleaseEscrow, self).__init__(typings.release_escrow)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -201,7 +188,7 @@ class Cancellation(PostResource):
     """
 
     def __init__(self):
-        super(Cancellation, self).__init__(cancellation)
+        super(Cancellation, self).__init__(typings.cancellation)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -222,7 +209,7 @@ class Dispute(PostResource):
     """
 
     def __init__(self):
-        super(Dispute, self).__init__(dispute)
+        super(Dispute, self).__init__(typings.dispute)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -244,7 +231,7 @@ class Diagnose(PostResource):
     """
 
     def __init__(self):
-        super(Diagnose, self).__init__(diagnose)
+        super(Diagnose, self).__init__(typings.diagnose)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -258,21 +245,41 @@ class Publish(PostResource):
     """
 
     def __init__(self):
-        super(Publish, self).__init__(publish)
+        super(Publish, self).__init__(typings.publish)
 
     def post(self):
         params = self.reqparse.parse_args()["params"]
         tx_type = self.reqparse.parse_args()["type"]
-        address = kusama.arbitrator_address
-
-        for param in params:
-            if type(param) != list:
-                continue
-            for item in param:
-                if item == "arbitrator_address":
-                    params[param][item] = address
 
         success, response = kusama.publish(tx_type, params)
+
+        return {
+            "success": success,
+            "response": response,
+        }
+
+
+class PublishApproveAsMulti(PostResource):
+    """
+    Publish `approve_as_multi` transaction
+    """
+
+    def __init__(self):
+        super(PublishApproveAsMulti, self).__init__(typings.publish_approve_as_multi)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+        print(args)
+        params = [
+            args["seller_address"],
+            args["signed_approve_as_multi"],
+            args["approve_as_multi_nonce"],
+            args["buyer_address"],
+            args["trade_value"],
+            [args["buyer_address"], kusama.arbitrator_address],
+        ]
+
+        success, response = kusama.publish("approve_as_multi", params)
 
         return {
             "success": success,
@@ -286,7 +293,7 @@ class Broadcast(PostResource):
     """
 
     def __init__(self):
-        super(Broadcast, self).__init__(broadcast)
+        super(Broadcast, self).__init__(typings.broadcast)
 
     def post(self):
         args = self.reqparse.parse_args()
@@ -316,6 +323,7 @@ def get_resources(api):
     api.add_resource(EscrowAddress, "/EscrowAddress")
     api.add_resource(EscrowPayloads, "/EscrowPayloads")
     api.add_resource(Publish, "/Publish")
+    api.add_resource(PublishApproveAsMulti, "/PublishApproveAsMulti")
     api.add_resource(Broadcast, "/Broadcast")
     api.add_resource(AsMultiPayload, "/AsMultiPayload")
     api.add_resource(ApproveAsMultiPayload, "/ApproveAsMultiPayload")

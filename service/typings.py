@@ -32,6 +32,14 @@ publish = [
     {"name": "params", "type": str, "required": True, "action": "append"},
 ]
 
+publish_approve_as_multi = [
+    {"name": "seller_address", "type": str, "required": True},
+    {"name": "buyer_address", "type": str, "required": True},
+    {"name": "signed_approve_as_multi", "type": str, "required": True},
+    {"name": "approve_as_multi_nonce", "type": int, "required": True},
+    {"name": "trade_value", "type": int, "required": True},
+]
+
 broadcast = [
     {"name": "type", "type": str, "required": True},
     {"name": "transaction", "type": str, "required": True},
