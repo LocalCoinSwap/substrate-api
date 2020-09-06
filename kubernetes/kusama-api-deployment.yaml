@@ -21,3 +21,15 @@ spec:
           image: $CONTAINER_REPO/$IMAGE_NAME:$COMMIT_HASH
           ports:
             - containerPort: 80
+          env:
+            - name: LCS_EC2_AWS_ACCESS_KEY_ID
+              value: $LCS_EC2_AWS_ACCESS_KEY_ID
+            - name: LCS_EC2_AWS_SECRET_ACCESS_KEY
+              value: $LCS_EC2_AWS_SECRET_ACCESS_KEY
+          resources:
+            limits:
+              memory: 2Gi
+              cpu: 2
+            requests:
+              memory: 512Mi
+              cpu: 1
