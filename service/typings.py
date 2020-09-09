@@ -96,3 +96,13 @@ is_transaction_success = [
 ]
 
 diagnose = [{"name": "escrow_address", "type": str, "required": True}]
+
+fee_return_tx = [
+    {"name": "seller_address", "type": str, "required": True},
+    {"name": "trade_value", "type": int, "required": True},
+    {"name": "fee_value", "type": int, "required": True},
+]
+
+welfare_tx = [
+    {"name": "buyer_address", "type": str, "required": True},
+]

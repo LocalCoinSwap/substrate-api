@@ -306,6 +306,40 @@ class Broadcast(PostResource):
         }
 
 
+class FeeReturnTx(PostResource):
+    """
+    Return the fee to the seller
+    """
+
+    def __init__(self):
+        super(FeeReturnTx, self).__init__(typings.fee_return_tx)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        transaction = kusama.fee_return_transaction(
+            args["seller_address"], args["trade_value"], args["fee_value"],
+        )
+
+        return {"transaction": transaction}
+
+
+class WelfareTx(PostResource):
+    """
+    Give the poor buyer some funds to finish that trade
+    """
+
+    def __init__(self):
+        super(WelfareTx, self).__init__(typings.welfare_tx)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+
+        transaction = kusama.welfare_transaction(args["buyer_address"])
+
+        return {"transaction": transaction}
+
+
 class AsMultiStorage(PostResource):
     """
     Generate and return transaction for `as_multi` call with store=True
@@ -349,4 +383,6 @@ def get_resources(api):
     api.add_resource(Cancellation, "/Cancellation")
     api.add_resource(Dispute, "/Dispute")
     api.add_resource(Diagnose, "/Diagnose")
+    api.add_resource(FeeReturnTx, "/FeeReturnTx")
+    api.add_resource(WelfareTx, "/WelfareTx")
     api.add_resource(HeartBeat, "/HeartBeat")
