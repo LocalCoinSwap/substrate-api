@@ -308,6 +308,7 @@ class PublishAsMulti(PostResource):
             args["nonce"],
             args["to_address"],
             args["trade_value"],
+            args["timepoint"],
             [args["other_signatory"], kusama.arbitrator_address],
             max_weight,
         ]

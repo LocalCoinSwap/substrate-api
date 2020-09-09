@@ -48,6 +48,7 @@ publish_as_multi = [
     {"name": "trade_value", "type": int, "required": True},
     {"name": "other_signatory", "type": str, "required": True},
     {"name": "max_weight", "type": int, "required": False},
+    {"name": "timepoint", "type": str, "required": True, "action": "append"},
 ]
 
 broadcast = [
