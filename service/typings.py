@@ -60,6 +60,12 @@ as_multi_payload = [
     {"name": "timepoint", "type": str, "required": False, "action": "append"},
 ]
 
+as_multi_storage = [
+    {"name": "from_address", "type": str, "required": True},
+    {"name": "to_address", "type": str, "required": True},
+    {"name": "value", "type": str, "required": True},
+]
+
 release_escrow = [
     {"name": "buyer_address", "type": str, "required": True},
     {"name": "trade_value", "type": int, "required": True},
