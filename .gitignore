@@ -138,3 +138,5 @@ dmypy.json
 
 # Code editors
 .vscode/
+
+**/local.env

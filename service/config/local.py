@@ -1,9 +1,10 @@
-from .common import get_parameters
+import os
+from pathlib import Path
 
-AWS_REGION = "us-east-1"
-AWS_PARAMETER_PATH = "/prod/kusama/"
+from dotenv import load_dotenv
 
-params = get_parameters(AWS_REGION, AWS_PARAMETER_PATH)
+env_path = Path(".") / ".env"
+load_dotenv(dotenv_path=env_path)
 
 UNIFIED_LOGGING = False
 DEBUG_STATUS = True
@@ -11,5 +12,5 @@ LOGSTASH = {"host": "localhost", "port": 9601, "name": "kusama_api_logger"}
 INTERNAL_ONLY = False
 PORT = 12000
 HOST = "0.0.0.0"
-ARBITRATOR_KEY = params["ARBITRATOR_HEX_SEED"]
+ARBITRATOR_KEY = os.getenv("ARBITRATOR_HEX_SEED")
 NODE_PROVIDER = "wss://kusama-rpc.polkadot.io/"

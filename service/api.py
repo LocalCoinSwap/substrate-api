@@ -350,11 +350,10 @@ class AsMultiStorage(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        success, response = kusama.as_multi_storage(*args)
+        transaction = kusama.as_multi_storage(*args)
 
         return {
-            "success": success,
-            "response": response,
+            "transaction": transaction,
         }
 
 
@@ -386,3 +385,4 @@ def get_resources(api):
     api.add_resource(FeeReturnTx, "/FeeReturnTx")
     api.add_resource(WelfareTx, "/WelfareTx")
     api.add_resource(HeartBeat, "/HeartBeat")
+    api.add_resource(AsMultiStorage, "/AsMultiStorage")

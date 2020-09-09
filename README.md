@@ -23,6 +23,8 @@ Use [pyenv-installer](https://github.com/pyenv/pyenv-installer) for easy install
  - Install precommit hook
     - `pre-commit install`
 
+ - Create a file `local.env` in `service/config/local.env` from `example-local.env`
+
 You're all set to hack!
 
 Before making changes, let's ensure tests run successfully on local.
