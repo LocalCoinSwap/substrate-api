@@ -40,6 +40,16 @@ publish_approve_as_multi = [
     {"name": "trade_value", "type": int, "required": True},
 ]
 
+publish_as_multi = [
+    {"name": "from_address", "type": str, "required": True},
+    {"name": "signature", "type": str, "required": True},
+    {"name": "nonce", "type": int, "required": True},
+    {"name": "to_address", "type": str, "required": True},
+    {"name": "trade_value", "type": int, "required": True},
+    {"name": "other_signatory", "type": str, "required": True},
+    {"name": "max_weight", "type": int, "required": False},
+]
+
 broadcast = [
     {"name": "type", "type": str, "required": True},
     {"name": "transaction", "type": str, "required": True},

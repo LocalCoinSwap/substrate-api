@@ -273,7 +273,6 @@ class PublishApproveAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        print(args)
         params = [
             args["seller_address"],
             args["signed_approve_as_multi"],
@@ -284,6 +283,36 @@ class PublishApproveAsMulti(PostResource):
         ]
 
         success, response = kusama.publish("approve_as_multi", params)
+
+        return {
+            "success": success,
+            "response": response,
+        }
+
+
+class PublishAsMulti(PostResource):
+    """
+    Publish `as_multi` transaction
+    """
+
+    def __init__(self):
+        super(PublishAsMulti, self).__init__(typings.publish_as_multi)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+        max_weight = args["max_weight"] if args["max_weight"] else 190949000
+
+        params = [
+            args["from_address"],
+            args["signature"],
+            args["nonce"],
+            args["to_address"],
+            args["trade_value"],
+            [args["other_signatory"], kusama.arbitrator_address],
+            max_weight,
+        ]
+
+        success, response = kusama.publish("as_multi", params)
 
         return {
             "success": success,
@@ -379,6 +408,7 @@ def get_resources(api):
     api.add_resource(EscrowPayloads, "/EscrowPayloads")
     api.add_resource(Publish, "/Publish")
     api.add_resource(PublishApproveAsMulti, "/PublishApproveAsMulti")
+    api.add_resource(PublishAsMulti, "/PublishAsMulti")
     api.add_resource(Broadcast, "/Broadcast")
     api.add_resource(AsMultiPayload, "/AsMultiPayload")
     api.add_resource(ApproveAsMultiPayload, "/ApproveAsMultiPayload")
