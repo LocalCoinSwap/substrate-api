@@ -384,7 +384,9 @@ class AsMultiStorage(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        transaction = kusama.as_multi_storage(*args)
+        transaction = kusama.as_multi_storage(
+            args["from_address"], args["to_address"], args["value"],
+        )
 
         return {
             "transaction": transaction,
