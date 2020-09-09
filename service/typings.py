@@ -58,6 +58,8 @@ as_multi_payload = [
     {"name": "value", "type": int, "required": True},
     {"name": "other_trader", "type": str, "required": True},
     {"name": "timepoint", "type": str, "required": False, "action": "append"},
+    {"name": "store_call", "type": bool, "required": False},
+    {"name": "max_weight", "type": int, "required": False},
 ]
 
 as_multi_storage = [

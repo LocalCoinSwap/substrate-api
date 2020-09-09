@@ -147,6 +147,8 @@ class AsMultiPayload(PostResource):
     def post(self):
         args = self.reqparse.parse_args()
         address = kusama.arbitrator_address
+        store_call = args["store_call"] if args["store_call"] else False
+        max_weight = args["max_weight"] if args["max_weight"] else 190949000
 
         as_multi_payload, nonce = kusama.as_multi_payload(
             args["from_address"],
@@ -154,6 +156,8 @@ class AsMultiPayload(PostResource):
             args["value"],
             [args["other_trader"], address],
             args["timepoint"],
+            store_call,
+            max_weight,
         )
 
         return {
