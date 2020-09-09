@@ -1,6 +1,6 @@
 import os
 
-ENV_SETUP = os.getenv("ENV_SETUP", "local")
+ENV_SETUP = os.getenv("ENV_SETUP", "production")
 
 if ENV_SETUP == "local":
     from .config.local import *
