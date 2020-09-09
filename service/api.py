@@ -306,6 +306,24 @@ class Broadcast(PostResource):
         }
 
 
+class AsMultiStorage(PostResource):
+    """
+    Generate and return transaction for `as_multi` call with store=True
+    """
+
+    def __init__(self):
+        super(AsMultiStorage, self).__init__(typings.as_multi_storage)
+
+    def post(self):
+        args = self.reqparse.parse_args()
+        success, response = kusama.as_multi_storage(*args)
+
+        return {
+            "success": success,
+            "response": response,
+        }
+
+
 class HeartBeat(Resource):
     """
     Are we alive?
