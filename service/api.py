@@ -402,6 +402,15 @@ class HeartBeat(Resource):
         return True
 
 
+class SentryTest(Resource):
+    """
+    Test sentry error capturing
+    """
+
+    def get(self):
+        _ = 1 / 0
+
+
 def get_resources(api):
     api.add_resource(Nonce, "/Nonce")
     api.add_resource(Balance, "/Balance")
@@ -423,3 +432,4 @@ def get_resources(api):
     api.add_resource(WelfareTx, "/WelfareTx")
     api.add_resource(HeartBeat, "/HeartBeat")
     api.add_resource(AsMultiStorage, "/AsMultiStorage")
+    api.add_resource(SentryTest, "/SentryTest")
