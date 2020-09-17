@@ -4,5 +4,6 @@ RUN mkdir /kusama-api
 WORKDIR /kusama-api
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
+COPY nginx.conf /app/
 COPY . .
 RUN chmod +x main.py
