@@ -26,10 +26,3 @@ spec:
               value: $LCS_EC2_AWS_ACCESS_KEY_ID
             - name: LCS_EC2_AWS_SECRET_ACCESS_KEY
               value: $LCS_EC2_AWS_SECRET_ACCESS_KEY
-          resources:
-            limits:
-              memory: 2Gi
-              cpu: 2
-            requests:
-              memory: 512Mi
-              cpu: 1
