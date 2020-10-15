@@ -148,7 +148,7 @@ class AsMultiPayload(PostResource):
         args = self.reqparse.parse_args()
         address = kusama.arbitrator_address
         store_call = args["store_call"] if args["store_call"] else False
-        max_weight = args["max_weight"] if args["max_weight"] else 190949000
+        max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
         as_multi_payload, nonce = kusama.as_multi_payload(
             args["from_address"],
@@ -300,7 +300,7 @@ class PublishAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        max_weight = args["max_weight"] if args["max_weight"] else 190949000
+        max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
         params = [
             args["from_address"],
