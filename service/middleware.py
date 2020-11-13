@@ -1,4 +1,4 @@
-from ksmutils import Kusama
+from substrateutils import Kusama
 
 from .settings import ARBITRATOR_KEY
 from .settings import NODE_PROVIDER
