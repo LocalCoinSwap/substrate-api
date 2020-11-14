@@ -13,4 +13,5 @@ INTERNAL_ONLY = False
 PORT = 12000
 HOST = "0.0.0.0"
 ARBITRATOR_KEY = os.getenv("ARBITRATOR_HEX_SEED")
-NODE_PROVIDER = "wss://kusama-rpc.polkadot.io/"
+KUSAMA_NODE_PROVIDER = "wss://kusama-rpc.polkadot.io/"
+POLKADOT_NODE_PROVIDER = "wss://rpc.polkadot.io/"

@@ -1,5 +1,5 @@
-# kusama-api
-Kusama microservice API providing REST endpoints for multi-signature trading, originally built for [LocalCoinSwap](https://localcoinswap.com)
+# substrate-api
+Substrate microservice API providing REST endpoints for multi-signature trading, originally built for [LocalCoinSwap](https://localcoinswap.com)
 
 ----
 
@@ -14,8 +14,8 @@ Use [pyenv-installer](https://github.com/pyenv/pyenv-installer) for easy install
 
  - Install and activate python 3.8.1 in the root directory
     - `pyenv install 3.8.1`
-    - `pyenv virtualenv 3.8.1 ksmapi`
-    - `pyenv local ksmapi`
+    - `pyenv virtualenv 3.8.1 substrateapi`
+    - `pyenv local substrateapi`
 
  - Install project requirements
     - `pip install -r requirements.txt`
