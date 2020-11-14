@@ -1,11 +1,8 @@
 import os
-from pathlib import Path
 
 from dotenv import load_dotenv
 
-env_path = Path(".") / ".env"
-load_dotenv(dotenv_path=env_path)
-
+load_dotenv()
 UNIFIED_LOGGING = False
 DEBUG_STATUS = True
 LOGSTASH = {"host": "localhost", "port": 9601, "name": "kusama_api_logger"}
