@@ -3,12 +3,12 @@ ENV PYTHONUNBUFFERED 1
 RUN adduser pyuser
 RUN mkdir /kusama-api
 WORKDIR /kusama-api
-COPY requirements.txt ./
 
 # This is needed for to install the rust bindings Python package
 RUN curl https://sh.rustup.rs -sSf | bash -s -- -y
 ENV PATH="/root/.cargo/bin:${PATH}"
 
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . .
 RUN chmod +x main.py
