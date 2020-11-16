@@ -1,10 +1,10 @@
 version: "3.7"
 
 services:
-  kusamaapi:
+  substrateapi:
     init: true
     stdin_open: true
-    container_name: kusamaapi
+    container_name: substrateapi
     tty: true
     image: ${CONTAINER_REPO}/${IMAGE_NAME}:${COMMIT_HASH}
     build:
