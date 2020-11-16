@@ -3,6 +3,7 @@ from flask_restful import Resource
 from service import typings
 from service.logger import Logger
 from service.middleware import kusama
+from service.middleware import load_substrate_types
 from service.utils import PostResource
 
 log = Logger("Api", True, True, False)
@@ -19,6 +20,7 @@ class Balance(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         return kusama.get_balance(args["address"])
 
@@ -32,7 +34,10 @@ class MultiBalance(PostResource):
         super(MultiBalance, self).__init__(typings.multi_balance)
 
     def post(self):
-        addresses = self.reqparse.parse_args()["addresses"]
+        args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
+        addresses = args()["addresses"]
         result = {}
 
         for address in addresses:
@@ -52,6 +57,7 @@ class Nonce(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         return kusama.get_nonce(args["address"])
 
@@ -66,6 +72,7 @@ class TransferPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         return kusama.transfer_payload(
             args["from_address"], args["to_address"], args["value"]
@@ -82,6 +89,7 @@ class EscrowAddress(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         return kusama.get_escrow_address(args["buyer_address"], args["seller_address"])
 
@@ -96,6 +104,7 @@ class EscrowPayloads(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         escrow_payload, fee_payload, nonce = kusama.escrow_payloads(
             args["seller_address"],
@@ -121,6 +130,8 @@ class ApproveAsMultiPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         address = kusama.arbitrator_address
 
         approve_as_multi_payload, nonce = kusama.approve_as_multi_payload(
@@ -146,6 +157,8 @@ class AsMultiPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         address = kusama.arbitrator_address
         store_call = args["store_call"] if args["store_call"] else False
         max_weight = args["max_weight"] if args["max_weight"] else 648378000
@@ -176,6 +189,8 @@ class ReleaseEscrow(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         address = kusama.arbitrator_address
 
         return kusama.release_escrow(
@@ -196,6 +211,8 @@ class Cancellation(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         address = kusama.arbitrator_address
 
         return kusama.cancellation(
@@ -217,6 +234,8 @@ class Dispute(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         address = kusama.arbitrator_address
 
         return kusama.resolve_dispute(
@@ -239,6 +258,7 @@ class Diagnose(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         return kusama.diagnose(args["escrow_address"])
 
@@ -252,8 +272,11 @@ class Publish(PostResource):
         super(Publish, self).__init__(typings.publish)
 
     def post(self):
-        params = self.reqparse.parse_args()["params"]
-        tx_type = self.reqparse.parse_args()["type"]
+        args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
+        params = args()["params"]
+        tx_type = args()["type"]
 
         success, response = kusama.publish(tx_type, params)
 
@@ -273,6 +296,8 @@ class PublishApproveAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         params = [
             args["seller_address"],
             args["signed_approve_as_multi"],
@@ -300,6 +325,8 @@ class PublishAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
         params = [
@@ -331,6 +358,7 @@ class Broadcast(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         success, response = kusama.broadcast(args["type"], args["transaction"])
 
@@ -350,6 +378,7 @@ class FeeReturnTx(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         transaction = kusama.fee_return_transaction(
             args["seller_address"], args["trade_value"], args["fee_value"],
@@ -368,6 +397,7 @@ class WelfareTx(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
 
         transaction = kusama.welfare_transaction(args["buyer_address"])
 
@@ -384,6 +414,8 @@ class AsMultiStorage(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
+        load_substrate_types(args)
+
         transaction = kusama.as_multi_storage(
             args["from_address"], args["to_address"], args["value"],
         )
