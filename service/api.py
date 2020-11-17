@@ -37,7 +37,7 @@ class MultiBalance(PostResource):
         args = self.reqparse.parse_args()
         load_substrate_types(args)
 
-        addresses = args()["addresses"]
+        addresses = args["addresses"]
         result = {}
 
         for address in addresses:
@@ -275,8 +275,8 @@ class Publish(PostResource):
         args = self.reqparse.parse_args()
         load_substrate_types(args)
 
-        params = args()["params"]
-        tx_type = args()["type"]
+        params = args["params"]
+        tx_type = args["type"]
 
         success, response = kusama.publish(tx_type, params)
 
