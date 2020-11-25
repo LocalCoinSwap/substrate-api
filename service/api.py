@@ -2,15 +2,23 @@ from flask_restful import Resource
 
 from service import typings
 from service.logger import Logger
-from service.middleware import kusama
-from service.middleware import load_substrate_types
+from service.middleware import CHAIN_MAP
 from service.utils import PostResource
 
 log = Logger("Api", True, True, False)
 log.info("Loading API....")
 
 
-class Balance(PostResource):
+class BasePostResource(PostResource):
+    def chain(self):
+        args = self.reqparse.parse_args()
+        currency = args.get("currency", "KSM")
+        chain = CHAIN_MAP[currency]
+        chain.load_type_registry()
+        return chain
+
+
+class Balance(BasePostResource):
     """
     Get the free balance from an address
     """
@@ -20,12 +28,10 @@ class Balance(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
-
-        return kusama.get_balance(args["address"])
+        return self.chain.get_balance(args["address"])
 
 
-class MultiBalance(PostResource):
+class MultiBalance(BasePostResource):
     """
     Get the balances from an address dictionary
     """
@@ -35,19 +41,19 @@ class MultiBalance(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
+        currency = args.get("currency", "KSM")
 
         addresses = args["addresses"]
         result = {}
 
         for address in addresses:
-            result[address] = {"KSM": {}}
-            result[address]["KSM"]["amount"] = kusama.get_balance(address)
+            result[address] = {currency: {}}
+            result[address][currency]["amount"] = self.chain.get_balance(address)
 
         return result
 
 
-class Nonce(PostResource):
+class Nonce(BasePostResource):
     """
     Get the nonce from an address
     """
@@ -57,12 +63,10 @@ class Nonce(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
-
-        return kusama.get_nonce(args["address"])
+        return self.chain.get_nonce(args["address"])
 
 
-class TransferPayload(PostResource):
+class TransferPayload(BasePostResource):
     """
     Get a payload to sign for a regular transfer
     """
@@ -72,14 +76,12 @@ class TransferPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
-
-        return kusama.transfer_payload(
+        return self.chain.transfer_payload(
             args["from_address"], args["to_address"], args["value"]
         )
 
 
-class EscrowAddress(PostResource):
+class EscrowAddress(BasePostResource):
     """
     Get an address to use for escrow
     """
@@ -89,12 +91,12 @@ class EscrowAddress(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
+        return self.chain.get_escrow_address(
+            args["buyer_address"], args["seller_address"]
+        )
 
-        return kusama.get_escrow_address(args["buyer_address"], args["seller_address"])
 
-
-class EscrowPayloads(PostResource):
+class EscrowPayloads(BasePostResource):
     """
     Get the payloads to sign to initiate escrow
     """
@@ -104,9 +106,8 @@ class EscrowPayloads(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        escrow_payload, fee_payload, nonce = kusama.escrow_payloads(
+        escrow_payload, fee_payload, nonce = self.chain.escrow_payloads(
             args["seller_address"],
             args["escrow_address"],
             args["trade_value"],
@@ -120,7 +121,7 @@ class EscrowPayloads(PostResource):
         }
 
 
-class ApproveAsMultiPayload(PostResource):
+class ApproveAsMultiPayload(BasePostResource):
     """
     Get the payload to sign for an approve as multi call
     """
@@ -130,11 +131,10 @@ class ApproveAsMultiPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        address = kusama.arbitrator_address
+        address = self.chain.arbitrator_address
 
-        approve_as_multi_payload, nonce = kusama.approve_as_multi_payload(
+        approve_as_multi_payload, nonce = self.chain.approve_as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
@@ -147,7 +147,7 @@ class ApproveAsMultiPayload(PostResource):
         }
 
 
-class AsMultiPayload(PostResource):
+class AsMultiPayload(BasePostResource):
     """
     Get the payload to sign for an as multi call
     """
@@ -157,13 +157,12 @@ class AsMultiPayload(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        address = kusama.arbitrator_address
+        address = self.chain.arbitrator_address
         store_call = args["store_call"] if args["store_call"] else False
         max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
-        as_multi_payload, nonce = kusama.as_multi_payload(
+        as_multi_payload, nonce = self.chain.as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
@@ -179,7 +178,7 @@ class AsMultiPayload(PostResource):
         }
 
 
-class ReleaseEscrow(PostResource):
+class ReleaseEscrow(BasePostResource):
     """
     Get the transactions to broadcast to release escrow
     """
@@ -189,11 +188,10 @@ class ReleaseEscrow(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        address = kusama.arbitrator_address
+        address = self.chain.arbitrator_address
 
-        return kusama.release_escrow(
+        return self.chain.release_escrow(
             args["buyer_address"],
             args["trade_value"],
             args["timepoint"],
@@ -201,7 +199,7 @@ class ReleaseEscrow(PostResource):
         )
 
 
-class Cancellation(PostResource):
+class Cancellation(BasePostResource):
     """
     Get the transactions to broadcast to perform a cancellation
     """
@@ -211,11 +209,10 @@ class Cancellation(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        address = kusama.arbitrator_address
+        address = self.chain.arbitrator_address
 
-        return kusama.cancellation(
+        return self.chain.cancellation(
             args["seller_address"],
             args["trade_value"],
             args["fee_value"],
@@ -224,7 +221,7 @@ class Cancellation(PostResource):
         )
 
 
-class Dispute(PostResource):
+class Dispute(BasePostResource):
     """
     Get the transactions to broadcast to resolve a dispute
     """
@@ -234,11 +231,10 @@ class Dispute(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        address = kusama.arbitrator_address
+        address = self.chain.arbitrator_address
 
-        return kusama.resolve_dispute(
+        return self.chain.resolve_dispute(
             args["victor"],
             args["seller_address"],
             args["trade_value"],
@@ -248,7 +244,7 @@ class Dispute(PostResource):
         )
 
 
-class Diagnose(PostResource):
+class Diagnose(BasePostResource):
     """
     Diagnose an escrow address from a problematic trade
     """
@@ -258,12 +254,11 @@ class Diagnose(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        return kusama.diagnose(args["escrow_address"])
+        return self.chain.diagnose(args["escrow_address"])
 
 
-class Publish(PostResource):
+class Publish(BasePostResource):
     """
     Build and publish a transaction
     """
@@ -273,12 +268,11 @@ class Publish(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
         params = args["params"]
         tx_type = args["type"]
 
-        success, response = kusama.publish(tx_type, params)
+        success, response = self.chain.publish(tx_type, params)
 
         return {
             "success": success,
@@ -286,7 +280,7 @@ class Publish(PostResource):
         }
 
 
-class PublishApproveAsMulti(PostResource):
+class PublishApproveAsMulti(BasePostResource):
     """
     Publish `approve_as_multi` transaction
     """
@@ -296,7 +290,6 @@ class PublishApproveAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
         params = [
             args["seller_address"],
@@ -304,10 +297,10 @@ class PublishApproveAsMulti(PostResource):
             args["approve_as_multi_nonce"],
             args["buyer_address"],
             args["trade_value"],
-            [args["buyer_address"], kusama.arbitrator_address],
+            [args["buyer_address"], self.chain.arbitrator_address],
         ]
 
-        success, response = kusama.publish("approve_as_multi", params)
+        success, response = self.chain.publish("approve_as_multi", params)
 
         return {
             "success": success,
@@ -315,7 +308,7 @@ class PublishApproveAsMulti(PostResource):
         }
 
 
-class PublishAsMulti(PostResource):
+class PublishAsMulti(BasePostResource):
     """
     Publish `as_multi` transaction
     """
@@ -325,7 +318,6 @@ class PublishAsMulti(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
         max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
@@ -336,11 +328,11 @@ class PublishAsMulti(PostResource):
             args["to_address"],
             args["trade_value"],
             args["timepoint"],
-            [args["other_signatory"], kusama.arbitrator_address],
+            [args["other_signatory"], self.chain.arbitrator_address],
             max_weight,
         ]
 
-        success, response = kusama.publish("as_multi", params)
+        success, response = self.chain.publish("as_multi", params)
 
         return {
             "success": success,
@@ -348,7 +340,7 @@ class PublishAsMulti(PostResource):
         }
 
 
-class Broadcast(PostResource):
+class Broadcast(BasePostResource):
     """
     Broadcast a built transaction
     """
@@ -358,9 +350,8 @@ class Broadcast(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        success, response = kusama.broadcast(args["type"], args["transaction"])
+        success, response = self.chain.broadcast(args["type"], args["transaction"])
 
         return {
             "success": success,
@@ -368,7 +359,7 @@ class Broadcast(PostResource):
         }
 
 
-class FeeReturnTx(PostResource):
+class FeeReturnTx(BasePostResource):
     """
     Return the fee to the seller
     """
@@ -378,16 +369,15 @@ class FeeReturnTx(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        transaction = kusama.fee_return_transaction(
+        transaction = self.chain.fee_return_transaction(
             args["seller_address"], args["trade_value"], args["fee_value"],
         )
 
         return {"transaction": transaction}
 
 
-class WelfareTx(PostResource):
+class WelfareTx(BasePostResource):
     """
     Give the poor buyer some funds to finish that trade
     """
@@ -397,14 +387,13 @@ class WelfareTx(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        transaction = kusama.welfare_transaction(args["buyer_address"])
+        transaction = self.chain.welfare_transaction(args["buyer_address"])
 
         return {"transaction": transaction}
 
 
-class AsMultiStorage(PostResource):
+class AsMultiStorage(BasePostResource):
     """
     Generate and return transaction for `as_multi` call with store=True
     """
@@ -414,9 +403,8 @@ class AsMultiStorage(PostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        load_substrate_types(args)
 
-        transaction = kusama.as_multi_storage(
+        transaction = self.chain.as_multi_storage(
             args["from_address"], args["to_address"], args["value"],
         )
 

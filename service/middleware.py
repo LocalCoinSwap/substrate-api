@@ -17,10 +17,7 @@ polkadot.connect()
 print("Kusama runtime", kusama.runtime_info()["specVersion"])
 print("Polkadot runtime", polkadot.runtime_info()["specVersion"])
 
-
-def load_substrate_types(args):
-    currency = args.get("currency", "KSM")
-    if currency == "KSM":
-        kusama.load_type_registry()
-    if currency == "DOT":
-        polkadot.load_type_registry()
+CHAIN_MAP = {
+    "KSM": kusama,
+    "DOT": polkadot,
+}
