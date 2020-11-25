@@ -19,8 +19,8 @@ print("Polkadot runtime", polkadot.runtime_info()["specVersion"])
 
 
 def load_substrate_types(args):
-    currency = args.get("currency") if args.get("currency", None) else "kusama"
-    if currency == "kusama":
+    currency = args.get("currency", "KSM")
+    if currency == "KSM":
         kusama.load_type_registry()
-    if currency == "polkadot":
+    if currency == "DOT":
         polkadot.load_type_registry()
