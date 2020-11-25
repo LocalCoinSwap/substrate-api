@@ -13,4 +13,4 @@ python-logstash-async==1.4.1
 requests==2.20.0
 scalecodec==0.10.24
 sentry-sdk[flask]==0.17.6
-substrate-utils==0.2.6
+substrate-utils==0.2.7
