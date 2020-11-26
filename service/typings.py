@@ -2,11 +2,20 @@
 Type specifications for API endpoints
 """
 
-balance = [{"name": "address", "type": str, "required": True}]
+balance = [
+    {"name": "currency", "type": str, "required": False},
+    {"name": "address", "type": str, "required": True},
+]
 
-nonce = [{"name": "address", "type": str, "required": True}]
+nonce = [
+    {"name": "currency", "type": str, "required": False},
+    {"name": "address", "type": str, "required": True},
+]
 
-multi_balance = [{"name": "addresses", "type": dict, "required": True}]
+multi_balance = [
+    {"name": "currency", "type": str, "required": False},
+    {"name": "addresses", "type": dict, "required": True},
+]
 
 transfer_payload = [
     {"name": "currency", "type": str, "required": False},
