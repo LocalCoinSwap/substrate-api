@@ -28,7 +28,7 @@ class Balance(BasePostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        return self.chain.get_balance(args["address"])
+        return self.chain().get_balance(args["address"])
 
 
 class MultiBalance(BasePostResource):
@@ -48,7 +48,7 @@ class MultiBalance(BasePostResource):
 
         for address in addresses:
             result[address] = {currency: {}}
-            result[address][currency]["amount"] = self.chain.get_balance(address)
+            result[address][currency]["amount"] = self.chain().get_balance(address)
 
         return result
 
@@ -63,7 +63,7 @@ class Nonce(BasePostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        return self.chain.get_nonce(args["address"])
+        return self.chain().get_nonce(args["address"])
 
 
 class TransferPayload(BasePostResource):
@@ -76,7 +76,7 @@ class TransferPayload(BasePostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        return self.chain.transfer_payload(
+        return self.chain().transfer_payload(
             args["from_address"], args["to_address"], args["value"]
         )
 
@@ -91,7 +91,7 @@ class EscrowAddress(BasePostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        return self.chain.get_escrow_address(
+        return self.chain().get_escrow_address(
             args["buyer_address"], args["seller_address"]
         )
 
@@ -107,7 +107,7 @@ class EscrowPayloads(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        escrow_payload, fee_payload, nonce = self.chain.escrow_payloads(
+        escrow_payload, fee_payload, nonce = self.chain().escrow_payloads(
             args["seller_address"],
             args["escrow_address"],
             args["trade_value"],
@@ -132,9 +132,9 @@ class ApproveAsMultiPayload(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        address = self.chain.arbitrator_address
+        address = self.chain().arbitrator_address
 
-        approve_as_multi_payload, nonce = self.chain.approve_as_multi_payload(
+        approve_as_multi_payload, nonce = self.chain().approve_as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
@@ -158,11 +158,11 @@ class AsMultiPayload(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        address = self.chain.arbitrator_address
+        address = self.chain().arbitrator_address
         store_call = args["store_call"] if args["store_call"] else False
         max_weight = args["max_weight"] if args["max_weight"] else 648378000
 
-        as_multi_payload, nonce = self.chain.as_multi_payload(
+        as_multi_payload, nonce = self.chain().as_multi_payload(
             args["from_address"],
             args["to_address"],
             args["value"],
@@ -189,9 +189,9 @@ class ReleaseEscrow(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        address = self.chain.arbitrator_address
+        address = self.chain().arbitrator_address
 
-        return self.chain.release_escrow(
+        return self.chain().release_escrow(
             args["buyer_address"],
             args["trade_value"],
             args["timepoint"],
@@ -210,9 +210,9 @@ class Cancellation(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        address = self.chain.arbitrator_address
+        address = self.chain().arbitrator_address
 
-        return self.chain.cancellation(
+        return self.chain().cancellation(
             args["seller_address"],
             args["trade_value"],
             args["fee_value"],
@@ -232,9 +232,9 @@ class Dispute(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        address = self.chain.arbitrator_address
+        address = self.chain().arbitrator_address
 
-        return self.chain.resolve_dispute(
+        return self.chain().resolve_dispute(
             args["victor"],
             args["seller_address"],
             args["trade_value"],
@@ -255,7 +255,7 @@ class Diagnose(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        return self.chain.diagnose(args["escrow_address"])
+        return self.chain().diagnose(args["escrow_address"])
 
 
 class Publish(BasePostResource):
@@ -272,7 +272,7 @@ class Publish(BasePostResource):
         params = args["params"]
         tx_type = args["type"]
 
-        success, response = self.chain.publish(tx_type, params)
+        success, response = self.chain().publish(tx_type, params)
 
         return {
             "success": success,
@@ -297,10 +297,10 @@ class PublishApproveAsMulti(BasePostResource):
             args["approve_as_multi_nonce"],
             args["buyer_address"],
             args["trade_value"],
-            [args["buyer_address"], self.chain.arbitrator_address],
+            [args["buyer_address"], self.chain().arbitrator_address],
         ]
 
-        success, response = self.chain.publish("approve_as_multi", params)
+        success, response = self.chain().publish("approve_as_multi", params)
 
         return {
             "success": success,
@@ -328,11 +328,11 @@ class PublishAsMulti(BasePostResource):
             args["to_address"],
             args["trade_value"],
             args["timepoint"],
-            [args["other_signatory"], self.chain.arbitrator_address],
+            [args["other_signatory"], self.chain().arbitrator_address],
             max_weight,
         ]
 
-        success, response = self.chain.publish("as_multi", params)
+        success, response = self.chain().publish("as_multi", params)
 
         return {
             "success": success,
@@ -351,7 +351,7 @@ class Broadcast(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        success, response = self.chain.broadcast(args["type"], args["transaction"])
+        success, response = self.chain().broadcast(args["type"], args["transaction"])
 
         return {
             "success": success,
@@ -370,7 +370,7 @@ class FeeReturnTx(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        transaction = self.chain.fee_return_transaction(
+        transaction = self.chain().fee_return_transaction(
             args["seller_address"], args["trade_value"], args["fee_value"],
         )
 
@@ -388,7 +388,7 @@ class WelfareTx(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        transaction = self.chain.welfare_transaction(args["buyer_address"])
+        transaction = self.chain().welfare_transaction(args["buyer_address"])
 
         return {"transaction": transaction}
 
@@ -404,7 +404,7 @@ class AsMultiStorage(BasePostResource):
     def post(self):
         args = self.reqparse.parse_args()
 
-        transaction = self.chain.as_multi_storage(
+        transaction = self.chain().as_multi_storage(
             args["from_address"], args["to_address"], args["value"],
         )
 
