@@ -14,7 +14,6 @@ class BasePostResource(PostResource):
         args = self.reqparse.parse_args()
         currency = args.get("currency", "KSM")
         chain = CHAIN_MAP[currency]
-        chain.load_type_registry()
         return chain
 
 
