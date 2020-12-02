@@ -61,22 +61,6 @@ class TestEscrowPayloads:
         assert type(response["nonce"]) == int
 
 
-class TestApproveAsMultiPayload:
-    def test_endpoint(self, test_client):
-        payload = {
-            "from_address": "HsgNgA5sgjuKxGUeaZPJE8rRn9RuixjvnPkVLFUYLEpj15G",
-            "to_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
-            "value": 9900000000,
-            "other_trader": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-        }
-        response = test_client.post("/ApproveAsMultiPayload", json=payload).get_json()
-        assert type(response["nonce"]) == int
-        assert (
-            len(response["approve_as_multi_payload"]) == 372
-            and response["approve_as_multi_payload"][0:2] == "0x"
-        )
-
-
 class TestAsMultiPayload:
     def test_endpoint(self, test_client):
         payload = {
@@ -92,31 +76,6 @@ class TestAsMultiPayload:
             len(response["as_multi_payload"]) == 408
             and response["as_multi_payload"][0:2] == "0x"
         )
-
-
-class TestReleaseEscrow:
-    def test_endpoint(self, test_client):
-        payload = {
-            "buyer_address": "CrjrfWVeFM7CFc3fvhwA7etuTdGirnSqBBNBzTiyTcRrPsP",
-            "trade_value": 9900000000,
-            "seller_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-            "timepoint": (2000, 8),
-        }
-        response = test_client.post("/ReleaseEscrow", json=payload).get_json()
-        assert len(response) == 464 and response[0:2] == "0x"
-
-
-class TestCancellation:
-    def test_endpoint(self, test_client):
-        payload = {
-            "seller_address": "CofvaLbP3m8PLeNRQmLVPWmTT7jGgAXTwyT69k2wkfPxJ9V",
-            "trade_value": 9900000000,
-            "fee_value": 10000,
-            "buyer_address": "D2bHQwFcQj11SvtkjULEdKhK4WAeP6MThXgosMHjW9DrmbE",
-            "timepoint": (2000, 8),
-        }
-        response = test_client.post("/Cancellation", json=payload).get_json()
-        assert len(response) == 464 and response[0:2] == "0x"
 
 
 class TestDispute:

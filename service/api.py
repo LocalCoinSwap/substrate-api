@@ -120,32 +120,6 @@ class EscrowPayloads(BasePostResource):
         }
 
 
-class ApproveAsMultiPayload(BasePostResource):
-    """
-    Get the payload to sign for an approve as multi call
-    """
-
-    def __init__(self):
-        super(ApproveAsMultiPayload, self).__init__(typings.approve_as_multi_payload)
-
-    def post(self):
-        args = self.reqparse.parse_args()
-
-        address = self.chain().arbitrator_address
-
-        approve_as_multi_payload, nonce = self.chain().approve_as_multi_payload(
-            args["from_address"],
-            args["to_address"],
-            args["value"],
-            [args["other_trader"], address],
-        )
-
-        return {
-            "approve_as_multi_payload": approve_as_multi_payload,
-            "nonce": nonce,
-        }
-
-
 class AsMultiPayload(BasePostResource):
     """
     Get the payload to sign for an as multi call
@@ -175,49 +149,6 @@ class AsMultiPayload(BasePostResource):
             "as_multi_payload": as_multi_payload,
             "nonce": nonce,
         }
-
-
-class ReleaseEscrow(BasePostResource):
-    """
-    Get the transactions to broadcast to release escrow
-    """
-
-    def __init__(self):
-        super(ReleaseEscrow, self).__init__(typings.release_escrow)
-
-    def post(self):
-        args = self.reqparse.parse_args()
-
-        address = self.chain().arbitrator_address
-
-        return self.chain().release_escrow(
-            args["buyer_address"],
-            args["trade_value"],
-            args["timepoint"],
-            [args["seller_address"], address],
-        )
-
-
-class Cancellation(BasePostResource):
-    """
-    Get the transactions to broadcast to perform a cancellation
-    """
-
-    def __init__(self):
-        super(Cancellation, self).__init__(typings.cancellation)
-
-    def post(self):
-        args = self.reqparse.parse_args()
-
-        address = self.chain().arbitrator_address
-
-        return self.chain().cancellation(
-            args["seller_address"],
-            args["trade_value"],
-            args["fee_value"],
-            [args["buyer_address"], address],
-            args["timepoint"],
-        )
 
 
 class Dispute(BasePostResource):
@@ -272,34 +203,6 @@ class Publish(BasePostResource):
         tx_type = args["type"]
 
         success, response = self.chain().publish(tx_type, params)
-
-        return {
-            "success": success,
-            "response": response,
-        }
-
-
-class PublishApproveAsMulti(BasePostResource):
-    """
-    Publish `approve_as_multi` transaction
-    """
-
-    def __init__(self):
-        super(PublishApproveAsMulti, self).__init__(typings.publish_approve_as_multi)
-
-    def post(self):
-        args = self.reqparse.parse_args()
-
-        params = [
-            args["seller_address"],
-            args["signed_approve_as_multi"],
-            args["approve_as_multi_nonce"],
-            args["buyer_address"],
-            args["trade_value"],
-            [args["buyer_address"], self.chain().arbitrator_address],
-        ]
-
-        success, response = self.chain().publish("approve_as_multi", params)
 
         return {
             "success": success,
@@ -438,13 +341,9 @@ def get_resources(api):
     api.add_resource(EscrowAddress, "/EscrowAddress")
     api.add_resource(EscrowPayloads, "/EscrowPayloads")
     api.add_resource(Publish, "/Publish")
-    api.add_resource(PublishApproveAsMulti, "/PublishApproveAsMulti")
     api.add_resource(PublishAsMulti, "/PublishAsMulti")
     api.add_resource(Broadcast, "/Broadcast")
     api.add_resource(AsMultiPayload, "/AsMultiPayload")
-    api.add_resource(ApproveAsMultiPayload, "/ApproveAsMultiPayload")
-    api.add_resource(ReleaseEscrow, "/ReleaseEscrow")
-    api.add_resource(Cancellation, "/Cancellation")
     api.add_resource(Dispute, "/Dispute")
     api.add_resource(Diagnose, "/Diagnose")
     api.add_resource(FeeReturnTx, "/FeeReturnTx")
