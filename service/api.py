@@ -27,7 +27,10 @@ class Balance(BasePostResource):
 
     def post(self):
         args = self.reqparse.parse_args()
-        return self.chain().get_balance(args["address"])
+        response = self.chain().get_balance(args["address"])
+        if response["success"] is False:
+            log.error("Error: Substrate API balance call failed", response)
+        return response
 
 
 class MultiBalance(BasePostResource):
@@ -203,7 +206,8 @@ class Publish(BasePostResource):
         tx_type = args["type"]
 
         success, response = self.chain().publish(tx_type, params)
-
+        if success is False:
+            log.error("Error: Substrate API publish call failed", response)
         return {
             "success": success,
             "response": response,
@@ -235,7 +239,8 @@ class PublishAsMulti(BasePostResource):
         ]
 
         success, response = self.chain().publish("as_multi", params)
-
+        if success is False:
+            log.error("Error: Substrate API PublishAsMulti call failed", response)
         return {
             "success": success,
             "response": response,
@@ -254,7 +259,8 @@ class Broadcast(BasePostResource):
         args = self.reqparse.parse_args()
 
         success, response = self.chain().broadcast(args["type"], args["transaction"])
-
+        if success is False:
+            log.error("Error: Substrate API Broadcast call failed", response)
         return {
             "success": success,
             "response": response,
