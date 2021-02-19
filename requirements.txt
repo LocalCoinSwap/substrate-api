@@ -11,6 +11,6 @@ pytest-mock==3.1.0
 python-dotenv==0.14.0
 python-logstash-async==1.4.1
 requests==2.20.0
-scalecodec==0.10.57
+scalecodec==0.10.60
 sentry-sdk[flask]==0.17.6
-substrate-utils==0.2.17
+substrate-utils==0.2.18
