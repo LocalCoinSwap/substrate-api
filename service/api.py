@@ -330,7 +330,7 @@ class SentryTest(Resource):
     """
 
     def get(self):
-        _ = 6 / 0
+        _ = 7 / 0
 
 
 def get_resources(api):
