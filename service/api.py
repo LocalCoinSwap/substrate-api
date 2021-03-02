@@ -233,7 +233,8 @@ class PublishAsMulti(BasePostResource):
             [args["other_signatory"], self.chain().arbitrator_address],
             max_weight,
         ]
-
+        log.info("Substrate address type is ", self.chain().address_type)
+        log.info("Params inPublishAsMulti are ", params)
         success, response = self.chain().publish("as_multi", params)
 
         return {
