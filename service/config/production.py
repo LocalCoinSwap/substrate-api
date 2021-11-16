@@ -24,4 +24,4 @@ PORT = 443
 HOST = "0.0.0.0"
 ARBITRATOR_KEY = params["ARBITRATOR_HEX_SEED"]
 KUSAMA_NODE_PROVIDER = "ws://ksmnode.lcs.internal/"
-POLKADOT_NODE_PROVIDER = "wss://rpc.polkadot.io/"
+POLKADOT_NODE_PROVIDER = "ws://ksmnode.lcs.internal:81/"
