@@ -13,5 +13,5 @@ python-dotenv==0.14.0
 python-logstash-async==1.4.1
 requests==2.26.0
 sentry-sdk[flask]==0.17.6
-substrate-utils==1.0.17
+substrate-utils==1.0.18
 werkzeug==1.0.1
