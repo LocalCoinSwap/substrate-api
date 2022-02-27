@@ -1,12 +1,13 @@
 from substrateutils import Kusama
 from substrateutils import Polkadot
-from substrateutils import update_registry
 
 from .settings import ARBITRATOR_KEY
 from .settings import KUSAMA_NODE_PROVIDER
 from .settings import POLKADOT_NODE_PROVIDER
 
-update_registry()
+# from substrateutils import update_registry
+
+# update_registry()
 print("Kusama provider", KUSAMA_NODE_PROVIDER)
 print("Polkadot provider", POLKADOT_NODE_PROVIDER)
 
