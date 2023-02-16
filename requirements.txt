@@ -15,4 +15,4 @@ requests==2.26.0
 scalecodec==1.0.34
 sentry-sdk[flask]==0.17.6
 substrate-utils==1.0.24
-werkzeug==1.0.1
+werkzeug==2.2.3
